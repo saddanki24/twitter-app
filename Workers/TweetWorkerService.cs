@@ -11,8 +11,7 @@ namespace TwitterStatistics.Workers
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
-        {
-            // todo handle retry
+        {           
             await _tweetStreamService.FetchTweetsAsync(cancellationToken);
         }
     }

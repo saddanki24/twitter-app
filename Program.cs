@@ -1,3 +1,5 @@
+using Polly;
+using Polly.Extensions.Http;
 using TwitterStatistics.Models;
 using TwitterStatistics.Services;
 using TwitterStatistics.Services.interfaces;
@@ -19,6 +21,18 @@ builder.Services.Configure<TwitterSettings>(config.GetRequiredSection(TwitterSet
 builder.Services.AddScoped<ITweetStatisticsService, TweetStatisticsService>();
 builder.Services.AddSingleton<ITweetStreamService, TweetStreamService>();
 builder.Services.AddSingleton<ITweetCacheService, TweetCacheService>();
+
+// add http client services.
+builder.Services.AddHttpClient<ITweetStreamService, TweetStreamService>(client =>
+{
+    var twitterConfig = builder.Configuration.GetSection(TwitterSettings.Twitter);
+    client.BaseAddress = new Uri(twitterConfig["BaseUrl"]);
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {twitterConfig["BearerToken"]}");
+})
+    .SetHandlerLifetime(Timeout.InfiniteTimeSpan)
+    .AddPolicyHandler(GetRetryPolicy());
 
 // register hosted service
 builder.Services.AddHostedService<TweetWorkerService>();
@@ -43,3 +57,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+        .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
