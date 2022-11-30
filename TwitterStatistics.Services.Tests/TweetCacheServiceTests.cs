@@ -1,4 +1,6 @@
 
+using NUnit.Framework;
+
 namespace TwitterStatistics.Services.Tests
 {
     [TestFixture]
@@ -32,6 +34,21 @@ namespace TwitterStatistics.Services.Tests
             var initialTweetCount = _tweetCacheService.HashTags.Count;
             _tweetCacheService.IncrementTweetCount();
             Assert.That(initialTweetCount + 1, Is.EqualTo(_tweetCacheService.TweetCount));
+        }
+
+        [Test]
+        public void Clear_Test()
+        {
+            _tweetCacheService.IncrementTweetCount();
+            _tweetCacheService.IncrementTweetCount();
+            _tweetCacheService.IncrementHashTagCount("test1", 1);
+            _tweetCacheService.IncrementHashTagCount("test1", 1);
+            _tweetCacheService.Clear();
+            Assert.Multiple(() =>
+            {
+                Assert.That(_tweetCacheService.HashTags.Count(), Is.EqualTo(0));
+                Assert.That(_tweetCacheService.TweetCount, Is.EqualTo(0));
+            });
         }
     }
 }

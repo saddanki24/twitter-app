@@ -38,6 +38,8 @@ builder.Services.AddHttpClient<ITweetStreamService, TweetStreamService>(client =
 
 // register hosted service
 builder.Services.AddHostedService<TweetWorkerService>();
+builder.Services.AddHostedService<TweetCleanupService>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

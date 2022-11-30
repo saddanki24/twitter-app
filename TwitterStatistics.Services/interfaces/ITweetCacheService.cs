@@ -26,5 +26,9 @@
         /// <param name="count">hashtag count</param>
         /// <returns></returns>
         int IncrementHashTagCount(string hashTag, int count);
+        /// <summary>
+        /// clears all statistics
+        /// </summary>
+        void Clear();
     }
 }

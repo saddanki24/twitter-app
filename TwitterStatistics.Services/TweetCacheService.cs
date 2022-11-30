@@ -35,6 +35,12 @@ namespace TwitterStatistics.Services
         public int IncrementHashTagCount(string hashTag, int count)
         {
            return _hashTags.AddOrUpdate(hashTag, count, (key, oldValue) => oldValue + count);
-        }       
+        }
+        /// <inheritdoc />
+        public void Clear()
+        {
+            _hashTags.Clear();
+            _tweetCount = 0;
+        }
     }
 }
