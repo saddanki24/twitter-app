@@ -21,7 +21,7 @@ builder.Services.Configure<TwitterSettings>(config.GetRequiredSection(TwitterSet
 
 // register services
 builder.Services.AddScoped<ITweetStatisticsService, TweetStatisticsService>();
-builder.Services.AddSingleton<ITweetStreamService, TweetStreamService>();
+builder.Services.AddScoped<ITweetStreamService, TweetStreamService>();
 builder.Services.AddSingleton<ITweetCacheService, TweetCacheService>();
 
 // add http client services.

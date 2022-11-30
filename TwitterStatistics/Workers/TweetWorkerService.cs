@@ -7,15 +7,31 @@ namespace TwitterStatistics.Workers
     /// </summary>
     public class TweetWorkerService : BackgroundService
     {
-        private readonly ITweetStreamService _tweetStreamService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<TweetWorkerService> _logger;
 
-        public TweetWorkerService(ITweetStreamService tweetStreamService) {
-            _tweetStreamService = tweetStreamService;
+        public TweetWorkerService(IServiceProvider serviceProvider, ILogger<TweetWorkerService> logger)
+        {
+            (_serviceProvider, _logger) = (serviceProvider, logger);
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
-        {           
-            await _tweetStreamService.FetchTweetsAsync(cancellationToken);
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    using IServiceScope scope = _serviceProvider.CreateScope();
+                    ITweetStreamService tweetStreamService =
+                        scope.ServiceProvider.GetRequiredService<ITweetStreamService>();
+                    await tweetStreamService.FetchTweetsAsync(cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "an error occured");
+                    throw;
+                }
+            }
         }
     }
 }
