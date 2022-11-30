@@ -71,13 +71,13 @@ namespace TwitterStatistics.Services
         {
             var streamUrlPath = "/2/tweets/sample/stream?tweet.fields=entities";
             using var response = await _httpClient.GetAsync(streamUrlPath,
-                HttpCompletionOption.ResponseHeadersRead);
+                HttpCompletionOption.ResponseHeadersRead);              
             response.EnsureSuccessStatusCode();
-            using var body = await response.Content.ReadAsStreamAsync();
+            using var body = await response.Content.ReadAsStreamAsync();              
             using var reader = new StreamReader(body);
             while (!reader.EndOfStream)
             {
-                var content = await reader.ReadLineAsync();
+                var content = await reader.ReadLineAsync().ConfigureAwait(false);
                 if (!string.IsNullOrEmpty(content))
                 {
                     var tweet = JsonSerializer.Deserialize<Tweet>(content, _jsonSerializeOptions);
