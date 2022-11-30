@@ -1,5 +1,6 @@
 using Polly;
 using Polly.Extensions.Http;
+using TwitterStatistics.Middleware;
 using TwitterStatistics.Models;
 using TwitterStatistics.Services;
 using TwitterStatistics.Services.interfaces;
@@ -53,6 +54,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.ConfigureExceptionHandler();
 
 app.MapControllers();
 
