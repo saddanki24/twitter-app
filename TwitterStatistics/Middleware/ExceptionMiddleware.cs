@@ -5,6 +5,9 @@ using System.Text.Json;
 
 namespace TwitterStatistics.Middleware
 {
+    /// <summary>
+    /// handles exception response for various environments
+    /// </summary>
     public static class ExceptionMiddleware
     {
         public static void ConfigureExceptionHandler(this WebApplication app)

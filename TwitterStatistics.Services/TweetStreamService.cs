@@ -5,6 +5,7 @@ using TwitterStatistics.Services.interfaces;
 
 namespace TwitterStatistics.Services
 {
+    /// <inheritdoc />
     public class TweetStreamService : ITweetStreamService
     {
         private readonly ITweetCacheService _cacheService;

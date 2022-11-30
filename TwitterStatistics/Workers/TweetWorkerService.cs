@@ -2,6 +2,9 @@
 
 namespace TwitterStatistics.Workers
 {
+    /// <summary>
+    /// worker service to fetch tweet in background
+    /// </summary>
     public class TweetWorkerService : BackgroundService
     {
         private readonly ITweetStreamService _tweetStreamService;
