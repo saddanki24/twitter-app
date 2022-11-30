@@ -41,7 +41,7 @@ namespace TwitterStatistics.Services
                     cancellationToken.ThrowIfCancellationRequested();
                     return;
                 }
-                await ProcessTweetStatisticsInternalAsync(tweet);
+                await ProcessTweetStatisticsInternalAsync(tweet).ConfigureAwait(false);
             });
         }
 

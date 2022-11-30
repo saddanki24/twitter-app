@@ -3,7 +3,7 @@
 namespace TwitterStatistics.Workers
 {
     /// <summary>
-    /// worker service to clean up tweet in background
+    /// worker service to clean up tweet statistics background
     /// </summary>
     public class TweetCleanupService : BackgroundService
     {
@@ -14,10 +14,10 @@ namespace TwitterStatistics.Workers
             _serviceProvider = serviceProvider;
         }
 
-        // cleans tweets every one minute to prevent excessive memory buildup
+        // clears tweet statistics every x minute's to prevent memory buildup
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {           
-            TimeSpan interval = TimeSpan.FromMinutes(1);           
+            TimeSpan interval = TimeSpan.FromMinutes(5);           
             using PeriodicTimer timer = new(interval);
             while (!cancellationToken.IsCancellationRequested &&
                 await timer.WaitForNextTickAsync(cancellationToken))
