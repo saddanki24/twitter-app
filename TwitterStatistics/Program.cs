@@ -12,8 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 IConfigurationRoot config = builder.Configuration
-    .AddJsonFile("appsettings.json", true, true)
+    .AddJsonFile("appsettings.json", false, true)  
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+    .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
     .Build();
 
 builder.Services.Configure<TwitterSettings>(config.GetRequiredSection(TwitterSettings.Twitter));
