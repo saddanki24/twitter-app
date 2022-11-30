@@ -40,7 +40,7 @@ namespace TwitterStatistics.Services
         public void Clear()
         {
             _hashTags.Clear();
-            _tweetCount = 0;
+            Interlocked.Exchange(ref _tweetCount, 0);            
         }
     }
 }
